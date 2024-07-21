@@ -1,8 +1,8 @@
-import streamlit as st
+import streamlit as st # type: ignore
 from datetime import datetime
-import pytz
-from langchain_huggingface import HuggingFaceEndpoint
-from langchain.prompts import PromptTemplate
+import pytz # type: ignore
+from langchain.llms import HuggingFaceHub # type: ignore # Updated import
+from langchain.prompts import PromptTemplate # type: ignore
 
 # Define the prompt for LangChain
 prompt_template = PromptTemplate(
@@ -15,9 +15,9 @@ prompt_template = PromptTemplate(
 )
 
 # Initialize the Hugging Face Hub model
-llm = HuggingFaceEndpoint(
-    endpoint_url="https://api-inference.huggingface.co/models/gpt2",  # Replace with the model you want to use
-    huggingfacehub_api_token="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"  # Replace with your Hugging Face API token
+llm = HuggingFaceHub(
+    api_token="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",  # Replace with your Hugging Face API token
+    model_name="gpt2",  # Replace with the model you want to use
 )
 
 # Mapping of common city names to pytz time zone identifiers
@@ -37,7 +37,7 @@ city_to_timezone = {
 
 def generate_response(prompt_template, llm, locations):
     prompt_text = prompt_template.format(locations=locations)
-    response = llm.invoke(prompt_text)
+    response = llm(prompt_text)
     return response
 
 def get_time_for_location(location):
